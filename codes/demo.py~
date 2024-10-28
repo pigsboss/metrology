@@ -1,0 +1,8 @@
+#!/usr/bin/env python
+import yaml
+import numpy as np
+with open('config.yml', mode='r') as fp:
+    cfg = yaml.safe_load(fp)
+print('Configuration loaded.')
+for key, val in cfg.items():
+    print("{}:".format(key))
