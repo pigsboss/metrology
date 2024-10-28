@@ -39,6 +39,12 @@ print(''.ljust(60,'-'))
 print('  + ToF sensor parameters:')
 print('    - Precision: {} mm'.format(
     cfg['sensor-tof']['precision']))
+print(''.ljust(60,'-'))
+print('  + Runtime parameters:')
+print('    - Spectral resolution: {}'.format(
+    cfg['runtime']['spectral-resolution']))
+print('    - Parameter resolution: {}'.format(
+    cfg['runtime']['parameter-resolution']))
 print(''.ljust(60,'='))
 
 # set parameters
@@ -53,3 +59,6 @@ g_imbalance   = eval(cfg['laser-int-g']['imbalance'])
 amp_stability =      cfg['sensor-int']['amplitude-stability']
 pha_stability =      cfg['sensor-int']['phase-stability']
 tof_precision =      cfg['sensor-tof']['precision']
+run_spec_res  =      cfg['runtime']['spectral-resolution']
+run_para_res  =      cfg['runtime']['parameter-resolution']
+
