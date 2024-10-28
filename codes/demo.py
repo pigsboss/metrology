@@ -42,3 +42,14 @@ print('    - Precision: {} mm'.format(
 print(''.ljust(60,'='))
 
 # set parameters
+r_wavelength  =      cfg['laser-int-r']['wavelength']
+r_bandwidth   =      cfg['laser-int-r']['bandwidth']
+r_intensity   = eval(cfg['laser-int-r']['intensity'])
+r_imbalance   = eval(cfg['laser-int-r']['imbalance'])
+g_wavelength  =      cfg['laser-int-g']['wavelength']
+g_bandwidth   =      cfg['laser-int-g']['bandwidth']
+g_intensity   = eval(cfg['laser-int-g']['intensity'])
+g_imbalance   = eval(cfg['laser-int-g']['imbalance'])
+amp_stability =      cfg['sensor-int']['amplitude-stability']
+pha_stability =      cfg['sensor-int']['phase-stability']
+tof_precision =      cfg['sensor-tof']['precision']
