@@ -31,4 +31,5 @@ sensor-tof:
   precision: 10.0
 runtime:
   spectral-resolution: 100
+  distance-resolution: 0.1
   parameter-resolution: 100
