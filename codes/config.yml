@@ -1,9 +1,9 @@
 # Laser source properties:
-#   wavelength: central wavelength, in nm
-#   bandwidth:  bandwidth (1-sigma), in nm
-#   stability:  long-term wavelength stability (1-sigma), in nm
-#   intensity:  observed total intensity at sensor, in counts/s
-#   imbalance:  power inconsistency between two arms
+#   wavelength:  central wavelength, in nm
+#   bandwidth:   bandwidth (1-sigma), in nm
+#   instability: long-term wavelength instability (1-sigma), in nm
+#   intensity:   observed total intensity at sensor, in counts/s
+#   imbalance:   power inconsistency between two arms
 # Laser interference sensing model:
 #   d_i = G_i * I_i + b_i, for i = 0,1,2,3.
 #   d_0, d_1, d_2 and d_3 are ABCD samplings at four different phases.
@@ -12,20 +12,20 @@
 #   precision:  ranging precision (1-sigma), in mm.
 
 laser-int-r:
-  wavelength: 633.0
-  bandwidth: 0.1
-  stability: 0.5
-  intensity: 1e6
-  imbalance: 1e-4
-laser-int-g:
   wavelength: 532.0
-  bandwidth: 0.1
-  stability: 0.5
-  intensity: 1e6
-  imbalance: 1e-4
+  bandwidth: 1.0
+  instability: 0.5
+  intensity: 1e9
+  imbalance: 1e-9
+laser-int-g:
+  wavelength: 635.0
+  bandwidth: 1.0
+  instability: 0.5
+  intensity: 1e9
+  imbalance: 1e-9
 sensor-int:
-  gain-stability:  0.01
-  phase-stability: 0.01
+  gain-deviation:  0.01
+  phase-deviation: 0.01
   background: 1e2
 sensor-tof:
   precision: 10.0

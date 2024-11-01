@@ -19,10 +19,10 @@ from getopt import gnu_getopt
 cfg_path = './config.yml'
 cfg = types.SimpleNamespace()
 sensor_r = types.SimpleNamespace()
-sensor_r.phases = np.double([0., np.pi*1.5, np.pi, np.pi*1.5])
+sensor_r.phases = np.double([0., np.pi*.5, np.pi, np.pi*1.5])
 sensor_r.gains  = np.double([1., 1., 1., 1.])
 sensor_g = types.SimpleNamespace()
-sensor_g.phases = np.double([0., np.pi*1.5, np.pi, np.pi*1.5])
+sensor_g.phases = np.double([0., np.pi*.5, np.pi, np.pi*1.5])
 sensor_g.gains  = np.double([1., 1., 1., 1.])
 
 def load_config(cfg_path):
@@ -37,8 +37,8 @@ def load_config(cfg_path):
     print('    - Typical wavelength: {} \u00b1 {} nm'.format(
         cfgdict['laser-int-r']['wavelength'],
         cfgdict['laser-int-r']['bandwidth']))
-    print('    - Wavelength stability: {} nm'.format(
-        cfgdict['laser-int-r']['stability']))
+    print('    - Wavelength instability: {} nm'.format(
+        cfgdict['laser-int-r']['instability']))
     print('    - Peak intensity: {:g} counts/s'.format(
         eval(cfgdict['laser-int-r']['intensity'])))
     print('    - Power imbalance: {} \u0025'.format(
@@ -48,20 +48,20 @@ def load_config(cfg_path):
     print('    - Typical wavelength: {} \u00b1 {} nm'.format(
         cfgdict['laser-int-g']['wavelength'],
         cfgdict['laser-int-g']['bandwidth']))
-    print('    - Wavelength stability: {} nm'.format(
-        cfgdict['laser-int-g']['stability']))
+    print('    - Wavelength instability: {} nm'.format(
+        cfgdict['laser-int-g']['instability']))
     print('    - Peak intensity: {:g} counts/s'.format(
         eval(cfgdict['laser-int-g']['intensity'])))
     print('    - Power imbalance: {} \u0025'.format(
         100.0 * eval(cfgdict['laser-int-g']['imbalance'])))
     print(''.ljust(60,'-'))
     print('  + Interference sensor parameters:')
-    print('    - Gain stability: {} \u0025'.format(
-        100.0*cfgdict['sensor-int']['gain-stability']))
-    print('    - Phase stability: {} \u0025'.format(
-        100.0*cfgdict['sensor-int']['phase-stability']))
+    print('    - Gain deviation: {} \u0025'.format(
+        100.0*cfgdict['sensor-int']['gain-deviation']))
+    print('    - Phase deviation: {} \u0025'.format(
+        100.0*cfgdict['sensor-int']['phase-deviation']))
     print('    - Background: {}'.format(
-        eval(cfgdict['sensor-int']['background'])))
+        (cfgdict['sensor-int']['background'])))
     print(''.ljust(60,'-'))
     print('  + ToF sensor parameters:')
     print('    - Precision: {} mm'.format(
@@ -86,9 +86,12 @@ def load_config(cfg_path):
     cfg.g_bandwidth    = cfgdict['laser-int-g']['bandwidth']
     cfg.g_intensity    = eval(cfgdict['laser-int-g']['intensity'])
     cfg.g_imbalance    = eval(cfgdict['laser-int-g']['imbalance'])
-    cfg.gain_stability = cfgdict['sensor-int']['gain-stability']
-    cfg.pha_stability  = cfgdict['sensor-int']['phase-stability']
-    cfg.background     = eval(cfgdict['sensor-int']['background'])
+    cfg.gain_std       = cfgdict['sensor-int']['gain-deviation']
+    cfg.pha_std        = cfgdict['sensor-int']['phase-deviation']
+    try:
+        cfg.background     = eval(cfgdict['sensor-int']['background'])
+    except TypeError:
+        cfg.background     = cfgdict['sensor-int']['background']
     cfg.tof_precision  = cfgdict['sensor-tof']['precision']
     cfg.run_spec_res   = cfgdict['runtime']['spectral-resolution']
     cfg.run_dist_res   = cfgdict['runtime']['distance-resolution']
@@ -102,18 +105,18 @@ def load_config(cfg_path):
     sensor_r.wavenumbers = np.reshape(
         np.pi*2. / sensor_r.wavelengths, (1, -1, 1))
     sensor_r.phases = np.reshape(np.random.normal(
-        sensor_r.phases, cfg.pha_stability), (1, 1, -1))
+        sensor_r.phases, cfg.pha_std), (1, 1, -1))
     sensor_r.gains = np.reshape(np.random.normal(
-        sensor_r.gains, cfg.gain_stability), (1, 1, -1))
+        sensor_r.gains, cfg.gain_std), (1, 1, -1))
     sensor_g.wavelengths = np.random.normal(
         cfg.g_wavelength,
         np.ones((cfg.run_spec_res,))*cfg.g_bandwidth*.5)
     sensor_g.wavenumbers = np.reshape(
         np.pi*2. / sensor_g.wavelengths, (1, -1, 1))
     sensor_g.phases = np.reshape(np.random.normal(
-        sensor_g.phases, cfg.pha_stability), (1, 1, -1))
+        sensor_g.phases, cfg.pha_std), (1, 1, -1))
     sensor_g.gains = np.reshape(np.random.normal(
-        sensor_g.gains, cfg.gain_stability), (1, 1, -1))
+        sensor_g.gains, cfg.gain_std), (1, 1, -1))
     return
 
 def get_sensors_data(opd_in):
@@ -156,9 +159,9 @@ where T >> 1/w.
             ne.evaluate("2.*cos(phi/2.)**2.+" +
                         "2.*eps*cos(phi/2.)*cos(phi/4.)+" +
                         ".5*eps**2.",
-                        local_dict={
-                            'eps':cfg.r_imbalance,
-                            'phi':phi}),
+                        local_dict = {
+                            'eps': cfg.r_imbalance,
+                            'phi': phi}),
             axis=1) / cfg.run_spec_res + cfg.background)
     phi = opd * sensor_g.wavenumbers + sensor_g.phases
     data_g = np.random.poisson(
@@ -166,9 +169,9 @@ where T >> 1/w.
             ne.evaluate("2.*cos(phi/2.)**2.+" +
                         "2.*eps*cos(phi/2.)*cos(phi/4.)+" +
                         ".5*eps**2.",
-                        local_dict={
-                            'eps':cfg.g_imbalance,
-                            'phi':phi}),
+                        local_dict = {
+                            'eps': cfg.g_imbalance,
+                            'phi': phi}),
             axis=1) / cfg.run_spec_res + cfg.background)
     data_tof = np.random.normal(opd, 1e6*cfg.tof_precision)
     return data_r, data_g, data_tof
