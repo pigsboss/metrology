@@ -178,7 +178,7 @@ J(phi) = --- | I(x,t,phi) dt
 ),
 where T >> 1/w.
 """
-    global sensor_r, sensor_g
+    global cfg, sensor_r, sensor_g, sensor_b
     opd = np.reshape(opd_in, (-1,1,1))
     phi = opd * sensor_r.wavenumbers + sensor_r.phases
     data_r = np.random.poisson(
@@ -212,6 +212,53 @@ where T >> 1/w.
             axis=1) / cfg.run_spec_res + cfg.background)
     data_tof = np.random.normal(opd, 1e6*cfg.tof_precision)
     return data_r, data_g, data_b, data_tof
+
+def phase_diff_error(
+        N=1000,
+        bandwidth=1.0,
+        intensity=1e6,
+        phase_std=0.1,
+        gain_std=0.1,
+        background=1e2,
+        imbalance=0.1
+):
+    """Phase difference estimate error analysis.
+"""
+    global cfg
+    seed = np.random.rand(N)-.5
+    pd_in = seed * 2. * np.pi
+    opd_in = seed * cfg.r_wavelength
+    opd = np.reshape(opd_in, (-1, 1, 1))
+    laser_wavelengths = np.random.normal(
+        cfg.r_wavelength,
+        np.ones((cfg.run_spec_res,))*.5*bandwidth)
+    laser_wavenumbers = np.reshape(
+        2.*np.pi/laser_wavelengths, (1, -1, 1))
+    sensor_phases = np.reshape(np.random.normal(
+        np.double([0., .5, 1., 1.5, 4., 4.5, 5., 5.5])*np.pi,
+        phase_std), (1, 1, -1))
+    sensor_gains = np.reshape(np.random.normal(
+        np.ones((8,)), gain_std), (1, 1, -1))
+    phi = opd * laser_wavenumbers + sensor_phases
+    data = np.random.poisson(sensor_gains * intensity * np.sum(
+        ne.evaluate("2.*cos(phi/2.)**2.+"+
+                    "2.*eps*cos(phi/2.)*cos(phi/4.)+"+
+                    ".5*eps**2.",
+                    local_dict={
+                        'eps': imbalance,
+                        'phi':phi}),
+        axis=1)/cfg.run_spec_res + background)
+    phi4 = np.arctan2(
+        data[0,:,3]-data[0,:,1],
+        data[0,:,0]-data[0,:,2])
+    phi8 = np.arctan2(
+        data[0,:,3]+data[0,:,7]-data[0,:,1]-data[0,:,5],
+        data[0,:,0]+data[0,:,4]-data[0,:,2]-data[0,:,6])
+    err4 = ((np.cos(pd_in)-np.cos(phi4))**2. +
+            (np.sin(pd_in)-np.sin(phi4))**2.)**.5
+    err8 = ((np.cos(pd_in)-np.cos(phi8))**2. +
+            (np.sin(pd_in)-np.sin(phi8))**2.)**.5
+    return err4, err8
 
 if __name__ == "__main__":
     opts, args = gnu_getopt(sys.argv[1:], 'hc:')
