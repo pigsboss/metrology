@@ -12,17 +12,23 @@
 #   precision:  ranging precision (1-sigma), in mm.
 
 laser-int-r:
-  wavelength: 532.0
-  bandwidth: 1.0
-  instability: 0.5
-  intensity: 1e9
-  imbalance: 1e-9
-laser-int-g:
   wavelength: 635.0
   bandwidth: 1.0
   instability: 0.5
-  intensity: 1e9
-  imbalance: 1e-9
+  intensity: 1e6
+  imbalance: 1e-6
+laser-int-g:
+  wavelength: 532.0
+  bandwidth: 1.0
+  instability: 0.5
+  intensity: 1e6
+  imbalance: 1e-6
+laser-int-b:
+  wavelength: 405.0
+  bandwidth: 1.0
+  instability: 0.5
+  intensity: 1e6
+  imbalance: 1e-6
 sensor-int:
   gain-deviation:  0.01
   phase-deviation: 0.01
