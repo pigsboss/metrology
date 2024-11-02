@@ -1,0 +1,74 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{xfrac}
+\begin{document}
+\title{Interference fringe sampling and phase difference estimate}
+\author{HUO Zhuoxi}
+\maketitle
+A sinusoidal wave
+\begin{equation}
+  W_1 \left(x, t\right) = A\cos\left(k x - \omega t\right)
+\end{equation}
+interferes with another wave of the same frequency and similar peak
+amplitude but with a phase difference
+\begin{equation}
+  W_2 \left(x, t\right) = \left(1+\epsilon\right)A
+  \cos\left(k x - \omega t + \varphi\right)
+\end{equation}
+and yields intensity fringe at $x=0$ as
+\begin{multline}
+    I\left(t, \varphi\right) = \lvert W_1 + W_2 \rvert^2
+      = A^2 \left[ 4\cos^2\frac{\varphi}{2}\cos^2\left(\frac{\varphi}{2} - \omega t\right) \right.\\
+      + \left. 2\epsilon\cos\frac{\varphi}{2}\cos\left(\frac{3\varphi}{4} - \omega t\right)
+      + 2\epsilon\cos\frac{\varphi}{2}\cos\frac{\varphi}{4}
+      + \epsilon^2\cos^2\left(\varphi - \omega t\right)\right] \text{,}
+\end{multline}
+where $\epsilon$ is a small quantity.
+
+Time-averaged fringe is
+\begin{equation}
+  \overline{I}\left(\varphi\right) = \frac{1}{T} \int_0^T I\left(t, \varphi\right) \mathrm{d} t =
+  A^2\left(1 + \cos\varphi + 2\epsilon\cos\frac{\varphi}{2}\cos\frac{\varphi}{4} + \frac{\epsilon^2}{2}\right)\text{,}
+\end{equation}
+where $\omega T \gg 1$.
+
+The fringe intensities sampled at $\varphi + \dfrac{i\pi}{2}$ with sensors of similar responses are
+\begin{equation}
+  J_i = \left(1 + \delta_i \right) \overline{I}\left(\varphi+\frac{i\pi}{2}\right) \text{.}
+\end{equation}
+
+ABCD 4-sensor samplings are
+\begin{equation}
+  \left .
+  \begin{aligned}
+  A & = J_0 \approx 1 + \cos\varphi \\
+  B & = J_1 \approx 1 - \sin\varphi \\
+  C & = J_2 \approx 1 - \cos\varphi \\
+  D & = J_3 \approx 1 + \sin\varphi
+  \end{aligned} \right\vert_{\epsilon \approx 0\text{, }\delta_i \approx 0}
+\end{equation}
+therefore the phase difference $\varphi$ is estimated as
+\begin{equation}
+  \varphi^\dagger = \arctan\frac{D-B}{A-C} \text{.}
+\end{equation}
+
+A modified 8-sensor sampling scheme is used for higher accuracy
+\begin{equation}
+  \left .
+  \begin{aligned}
+  J_0   & \approx 1 + \cos\varphi + 2\epsilon\cos\frac{\varphi}{2}\cos\frac{\varphi}{4} \\
+  J_1   & \approx 1 - \sin\varphi + 2\epsilon\cos\left(\frac{\varphi}{2}+\frac{\pi}{4}\right)\cos\left(\frac{\varphi}{4}+\frac{\pi}{8}\right) \\
+  J_2   & \approx 1 - \cos\varphi - 2\epsilon\sin\frac{\varphi}{2}\cos\left(\frac{\varphi}{4}+\frac{\pi}{4}\right) \\
+  J_3   & \approx 1 + \sin\varphi + 2\epsilon\sin\left(\frac{\varphi}{2}+\frac{\pi}{4}\right)\sin\left(\frac{\varphi}{4}-\frac{\pi}{8}\right) \\
+  J_8   & \approx 1 + \cos\varphi - 2\epsilon\cos\frac{\varphi}{2}\cos\frac{\varphi}{4} \\
+  J_9   & \approx 1 - \sin\varphi - 2\epsilon\cos\left(\frac{\varphi}{2}+\frac{\pi}{4}\right)\cos\left(\frac{\varphi}{4}+\frac{\pi}{8}\right)\\
+  J_{10} & \approx 1 - \cos\varphi + 2\epsilon\sin\frac{\varphi}{2}\cos\left(\frac{\varphi}{4}+\frac{\pi}{4}\right) \\
+  J_{11} & \approx 1 + \sin\varphi - 2\epsilon\sin\left(\frac{\varphi}{2}+\frac{\pi}{4}\right)\sin\left(\frac{\varphi}{4}-\frac{\pi}{8}\right)
+  \end{aligned} \right\vert_{\epsilon^2 \approx 0\text{, }\delta_i \approx 0}
+\end{equation}
+the phase difference is estimated as
+\begin{equation}
+  \varphi^{\dagger\dagger} = \arctan\frac{J_3+J_{11}-J_1-J_9}{J_0+J_8-J_2-J_{10}} \text{.}
+\end{equation}
+
+\end{document}

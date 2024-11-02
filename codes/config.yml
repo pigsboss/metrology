@@ -15,24 +15,24 @@ laser-int-r:
   wavelength: 635.0
   bandwidth: 1.0
   instability: 0.5
-  intensity: 1e6
-  imbalance: 1e-6
+  intensity: 1e8
+  imbalance: 2e-1
 laser-int-g:
   wavelength: 532.0
   bandwidth: 1.0
   instability: 0.5
-  intensity: 1e6
-  imbalance: 1e-6
+  intensity: 1e8
+  imbalance: 2e-1
 laser-int-b:
   wavelength: 405.0
   bandwidth: 1.0
   instability: 0.5
-  intensity: 1e6
-  imbalance: 1e-6
+  intensity: 1e8
+  imbalance: 2e-1
 sensor-int:
-  gain-deviation:  0.01
-  phase-deviation: 0.01
-  background: 1e2
+  gain-deviation:  0.001
+  phase-deviation: 0.001
+  background: 1e1
 sensor-tof:
   precision: 10.0
 runtime:

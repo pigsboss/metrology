@@ -19,14 +19,14 @@ from getopt import gnu_getopt
 cfg_path = './config.yml'
 cfg = types.SimpleNamespace()
 sensor_r = types.SimpleNamespace()
-sensor_r.phases = np.double([0., np.pi*.5, np.pi, np.pi*1.5])
-sensor_r.gains  = np.double([1., 1., 1., 1.])
+sensor_r.phases = np.double([0.0, 0.5, 1.0, 1.5, 4.0, 4.5, 5.0, 5.5])*np.pi
+sensor_r.gains  = np.double([1., 1., 1., 1., 1., 1., 1., 1.])
 sensor_g = types.SimpleNamespace()
-sensor_g.phases = np.double([0., np.pi*.5, np.pi, np.pi*1.5])
-sensor_g.gains  = np.double([1., 1., 1., 1.])
+sensor_g.phases = np.double([0.0, 0.5, 1.0, 1.5, 4.0, 4.5, 5.0, 5.5])*np.pi
+sensor_g.gains  = np.double([1., 1., 1., 1., 1., 1., 1., 1.])
 sensor_b = types.SimpleNamespace()
-sensor_b.phases = np.double([0., np.pi*.5, np.pi, np.pi*1.5])
-sensor_b.gains  = np.double([1., 1., 1., 1.])
+sensor_b.phases = np.double([0.0, 0.5, 1.0, 1.5, 4.0, 4.5, 5.0, 5.5])*np.pi
+sensor_b.gains  = np.double([1., 1., 1., 1., 1., 1., 1., 1.])
 
 def load_config(cfg_path):
     """Load configuration file.
